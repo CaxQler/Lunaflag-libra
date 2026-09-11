@@ -1,5 +1,6 @@
-local Lunaflag = loadstring(game:HttpGet("https://raw.githubusercontent.com/CaxQler/Lunaflag-libra/refs/heads/main/Library.lua"))()
-
+local Lunaflag = loadstring(game:HttpGet("https://raw.githubusercontent.com/CaxQler/Lunaflag-libra/refs/heads/main/Library.lua"))() 
+local ThemeManager = loadstring(game:HttpGet("https://raw.githubusercontent.com/CaxQler/Lunaflag-libra/refs/heads/Lib/ThemeManager.lua"))()
+local SaveManager = loadstring(game:HttpGet("https://raw.githubusercontent.com/CaxQler/Lunaflag-libra/refs/heads/Lib/SaveManager.lua"))()
 local Window = Lunaflag:CreateWindow({
     Title = "Lunaflag UI",
     Center = true,
@@ -103,9 +104,8 @@ LeftGroup:AddButton({
 })
 
 LeftGroup:AddDivider()
-
-LeftGroup:AddLabel("This is a normal label")
-LeftGroup:AddLabel("This is a long text that can wrap", true)
+LeftGroup:AddLabel("Normal label")
+LeftGroup:AddLabel("Long text that can wrap", true)
 
 local RightGroup = MainTab:AddRightGroupbox("Visuals")
 
@@ -140,7 +140,41 @@ DepBox:AddSlider("DepSlider", {
     Callback = function(v) end
 })
 
+ThemeManager:SetLibrary(Lunaflag)
+SaveManager:SetLibrary(Lunaflag)
+
+SaveManager:IgnoreThemeSettings()
+
+ThemeManager:SetFolder("LunaflagSettings")
+SaveManager:SetFolder("LunaflagSettings")
+
+ThemeManager:ApplyToTab(MiscTab)
+SaveManager:BuildConfigSection(MiscTab)
+
+local UIBox = MiscTab:AddRightGroupbox("UI")
+
+UIBox:AddLabel("Menu Key"):AddKeyPicker("MenuKey", {
+    Default = "RightControl",
+    Mode = "Toggle",
+    Text = "Menu",
+    Callback = function() end
+})
+
+Lunaflag.ToggleKeybind = Options.MenuKey
+
+UIBox:AddDivider()
+
+UIBox:AddButton({
+    Text = "Unload UI",
+    DoubleClick = true,
+    Func = function()
+        Lunaflag:Unload()
+    end
+})
+
 Lunaflag:SetWatermark("Lunaflag | v1.0")
 Lunaflag:SetWatermarkVisibility(true)
+
+SaveManager:LoadAutoloadConfig()
 
 Lunaflag:Notify("Lunaflag loaded successfully!", 4)
